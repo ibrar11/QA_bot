@@ -62,3 +62,10 @@ def vector_database(chunks):
     embedding_model = watsonx_embedding()
     vectorb = Chroma.from_documents(chunks,embedding_model)
     return vectorb
+
+def retriever(file):
+    splits = document_loader(file)
+    chunks = text_splitter(splits)
+    vectordb = vector_database(chunks)
+    retriever = vectordb.as_retriever()
+    return retriever
