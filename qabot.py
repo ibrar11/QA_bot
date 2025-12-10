@@ -57,3 +57,8 @@ def watsonx_embedding():
         params=embed_params
     )
     return watsonx_embedding
+
+def vector_database(chunks):
+    embedding_model = watsonx_embedding()
+    vectorb = Chroma.from_documents(chunks,embedding_model)
+    return vectorb
