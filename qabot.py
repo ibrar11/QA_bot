@@ -43,3 +43,17 @@ def text_splitter(data):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=0)
     chunks = text_splitter(data)
     return chunks
+
+def watsonx_embedding():
+    embed_params = {
+        EmbedTextParamsMetaNames.TRUNCATE_INPUT_TOKENS: 512,
+        EmbedTextParamsMetaNames.MIN_CHUNK_SIZE: 0
+    }
+
+    watsonx_embedding = WatsonxEmbeddings(
+        model_id="ibm/slate-125m-english-embeddings",
+        url="https://jp-tok.ml.cloud.ibm.com",
+        project_id="9a84ef08-3951-4195-bbc4-90d096773e14",
+        params=embed_params
+    )
+    return watsonx_embedding
