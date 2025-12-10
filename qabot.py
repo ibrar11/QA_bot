@@ -38,3 +38,8 @@ def document_loader(file):
     loader = PyPDFLoader(file.name)
     loaded_document = loader.load()
     return loaded_document
+
+def text_splitter(data):
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=0)
+    chunks = text_splitter(data)
+    return chunks
