@@ -33,3 +33,8 @@ def get_llm():
         params=parameters,
     )
     return watsonx_llm
+
+def document_loader(file):
+    loader = PyPDFLoader(file.name)
+    loaded_document = loader.load()
+    return loaded_document
