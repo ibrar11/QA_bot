@@ -69,3 +69,14 @@ def retriever(file):
     vectordb = vector_database(chunks)
     retriever = vectordb.as_retriever()
     return retriever
+
+def retriever_qa(file, query):
+    llm = get_llm()
+    retriever_obj = retriever(file)
+    qa = RetrievalQA.from_chain_type(
+        llm = llm,
+        retriever = retriever_obj,
+        return_source_documents = False
+    )
+    response = qa.invoke(query)
+    return response['result']
