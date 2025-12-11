@@ -101,3 +101,5 @@ rag_application = gr.Interface(
     title="Watsonx RAG PDF Chatbot",
     description="Upload a PDF document and ask any question. The chatbot will try to answer using the provided document."
 )
+
+rag_application.launch(server_name="0.0.0.0", server_port=7860, share=True)
