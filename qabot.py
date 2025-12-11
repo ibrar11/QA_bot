@@ -80,3 +80,24 @@ def retriever_qa(file, query):
     )
     response = qa.invoke(query)
     return response['result']
+
+rag_application = gr.Interface(
+    fn=retriever_qa,
+    allow_flagging="never",
+    inputs=[
+        gr.File(
+            label="Upload PDF File",
+            file_count="single",
+            file_types=['.pdf'],
+            type="filepath"
+        ),
+        gr.Textbox(
+            label="Input Query",
+            lines=2,
+            placeholder="Type your question here..."
+        )
+    ],
+    outputs=gr.Textbox(label="Answer"),
+    title="Watsonx RAG PDF Chatbot",
+    description="Upload a PDF document and ask any question. The chatbot will try to answer using the provided document."
+)
