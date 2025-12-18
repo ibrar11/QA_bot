@@ -4,6 +4,7 @@ from ibm_watsonx_ai.foundation_models.utils.enums import DecodingMethods
 from ibm_watsonx_ai.metanames import EmbedTextParamsMetaNames
 from ibm_watsonx_ai import Credentials
 from langchain_ibm import WatsonxLLM, WatsonxEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from langchain_community.document_loaders import PyPDFLoader
@@ -29,6 +30,7 @@ def get_llm():
     watsonx_llm = WatsonxLLM(
         model_id=model_id,
         url="https://jp-tok.ml.cloud.ibm.com",
+        apikey="6DXNLN4Ipg-9w-t6UYKNpZ331ThpAyaqmgEnXJjWYoRT",
         project_id=project_id,
         params=parameters,
     )
@@ -41,27 +43,28 @@ def document_loader(file):
 
 def text_splitter(data):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=0)
-    chunks = text_splitter(data)
+    chunks = text_splitter.split_documents(data)
     return chunks
 
-def watsonx_embedding():
-    embed_params = {
-        EmbedTextParamsMetaNames.TRUNCATE_INPUT_TOKENS: 512,
-        EmbedTextParamsMetaNames.MIN_CHUNK_SIZE: 0
-    }
+def huggingFace_embedding():
+    # embed_params = {
+    #     EmbedTextParamsMetaNames.TRUNCATE_INPUT_TOKENS: 512
+    # }
 
-    watsonx_embedding = WatsonxEmbeddings(
-        model_id="ibm/slate-125m-english-embeddings",
-        url="https://jp-tok.ml.cloud.ibm.com",
-        project_id="9a84ef08-3951-4195-bbc4-90d096773e14",
-        params=embed_params
-    )
-    return watsonx_embedding
+    # watsonx_embedding = WatsonxEmbeddings(
+    #     model_id="multilingual-e5-large",
+    #     url="https://jp-tok.ml.cloud.ibm.com",
+    #     apikey="6DXNLN4Ipg-9w-t6UYKNpZ331ThpAyaqmgEnXJjWYoRT",
+    #     project_id="9a84ef08-3951-4195-bbc4-90d096773e14",
+    #     params=embed_params
+    # )
+    huggingFace_embedding = HuggingFaceEmbeddings()
+    return huggingFace_embedding
 
 def vector_database(chunks):
-    embedding_model = watsonx_embedding()
-    vectorb = Chroma.from_documents(chunks,embedding_model)
-    return vectorb
+    embedding_model = huggingFace_embedding()
+    vectordb = Chroma.from_documents(chunks,embedding_model)
+    return vectordb
 
 def retriever(file):
     splits = document_loader(file)
